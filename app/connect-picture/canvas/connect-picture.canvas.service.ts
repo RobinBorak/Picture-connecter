@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable, ElementRef} from '@angular/core';
+import {ConnectPictureService} from '../connect-picture.service';
 
 @Injectable()
 export class PictureCanvasService {
 
-	constructor() { }
+	constructor(private connectPictureService: ConnectPictureService, private el: ElementRef) { }
 
 	isTouch: boolean = !!('ontouchstart' in window);
 	PAINT_START: string = this.isTouch ? 'touchstart' : 'mousedown';
@@ -15,12 +16,60 @@ export class PictureCanvasService {
 	lineCurrent = [];
 	imagesDrawn = []; //array object
 	isPainting: boolean = false;
+	canvasSize = {
+		canvasHeight: 1000,
+		canvasWidth: 1000,
+		imageOptions: {
+			offsetX: 0,
+			offsetY: 0,
+			height: 200,
+			width: 200,
+			xPadding: 150,
+			yPadding: 25
+		}
+	}
+	
+	calculateCanvasSizes(nrOfImages){
+		//document.getElementById('canvas-container');
+		let fullHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - (this.el.nativeElement.offsetTop+this.el.nativeElement.offsetLeft);
+		let fullWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0) - (this.el.nativeElement.offsetLeft*2);
+		let xPadding: number = 150;
+		let yPadding: number = 25;
+		let imgHeight = (fullHeight<=fullWidth) ? 
+			Math.round(fullHeight/(nrOfImages/2)) - (yPadding/2) : 
+				Math.round(fullWidth/2)-(xPadding/2);
 
-	canvasNew=(divId, pictureData)=>{
+
+
+		this.canvasSize = {
+			canvasHeight: (fullHeight),
+			canvasWidth: (fullWidth),
+			imageOptions: {
+				offsetX: 0,
+				offsetY: 0,
+				height: (imgHeight),	  //maxHeight
+				width: (imgHeight), //70,//
+//				width: (fullWidth-150)/2, //maxWidth
+				xPadding: xPadding,
+				yPadding: yPadding
+			}
+		};
+
+		console.log("this.canvasSize: ", this.canvasSize);
+	} //c
+// 824 * 662
+
+
+
+	canvasNew=(divId, pictureDataArg)=>{
 		let canvasContainer = document.getElementById(divId);
 		let canvas = document.createElement('canvas');
-		canvas.height = 1000;
-		canvas.width = 1000;
+		let pictureData = (Object.assign({}, pictureDataArg));
+		pictureData = this.connectPictureService.sortPictures(pictureData);
+		this.calculateCanvasSizes(pictureData.length);
+
+		canvas.height = this.canvasSize.canvasHeight;
+		canvas.width = this.canvasSize.canvasWidth;
 		canvas.id = 'canvas-main';
 		canvasContainer.appendChild(canvas);
 
@@ -28,14 +77,7 @@ export class PictureCanvasService {
 		let ctx = canvas.getContext("2d");
 
 		//px
-		let imageOptions = {
-			offsetX: 0,
-			offsetY: 0,
-			height: 200,
-			width: 200,
-			xPadding: 150,
-			yPadding: 25
-		};
+		let imageOptions = this.canvasSize.imageOptions;
 
 		for (let i = 0; i<pictureData.length; i++) {
 			let picture = pictureData[i];
@@ -74,12 +116,12 @@ export class PictureCanvasService {
 		return ctx;
 	}
 
-	canvasListenersInit(divId){
+	canvasListenersInit=(divId)=>{
 		
 		let canvasContainer = document.getElementById(divId);
 		let canvas = document.createElement('canvas');
-		canvas.height = 1000;
-		canvas.width = 1000;
+		canvas.height = this.canvasSize.canvasHeight;
+		canvas.width = this.canvasSize.canvasWidth;
 		canvas.id = 'canvas-draw';
 		canvas.style.cssText = 'position: absolute;top: 0;left: 0;cursor:crosshair;';
 		canvas.getContext("2d").lineWidth = 8;
@@ -148,7 +190,7 @@ export class PictureCanvasService {
 		canvas.font='150px Glyphicon';
 		//Draw one of the Font Awesome characters on the canvas:
 		// specify the desired character code with the Unicode prefix (\u) 
-		canvas.fillText('✔',centerX,centerY);
+		canvas.fillText('\u2713',centerX,centerY);
 
 		canvas.arc(centerX,centerY,100,0,2*Math.PI);
 		canvas.stroke();

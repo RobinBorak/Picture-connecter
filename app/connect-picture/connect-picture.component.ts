@@ -18,6 +18,8 @@ export class ConnectPictureComponent implements OnInit{
 	constructor(private connectPictureService: ConnectPictureService, private pictureCanvasService: PictureCanvasService) { }
 
 	ngOnInit() {
+		//document.getElementById('header').style.display = 'none';
+		//document.getElementById('container').style.paddingTop = '0px';
 		this.connectPictureService.getConnectPictures().subscribe(connectPictures =>{
 			this.connectPictures = connectPictures;
 			let canvasElementRef = this.pictureCanvasService.canvasNew('canvas-container', connectPictures);
