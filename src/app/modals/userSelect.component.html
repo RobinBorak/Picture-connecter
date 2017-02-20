@@ -1,0 +1,28 @@
+<div bsModal #userSelectModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Select user</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <label for="username">User</label>
+          <select class="form-control" name="username" id="username" [(ngModel)]="user.username">
+            <option *ngFor="let username of usernames" [value]="username">{{username}}</option>
+          </select>
+          
+          <i style="position: relative; bottom: 1.8em; margin-left: 10em; height: 0"
+              *ngIf="!user.username" class="fa fa-arrow-left bounce-horizontal"> Choose </i>
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-success" (click)="selectUser()">Select</button>
+      </div>
+    </div>
+  </div>
+</div>
