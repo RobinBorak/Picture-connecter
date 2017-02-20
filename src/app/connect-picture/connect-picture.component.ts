@@ -39,7 +39,8 @@ export class ConnectPictureComponent implements AfterViewInit{
 			this.userSelectComponent.showModal();
 			this.userSelectComponent.userSelectModal.onHidden.subscribe(
 				response => {
-					this.loadAndInitConnectPicture();
+					console.log("data passed from userSelectModal: ", response.data);
+					this.loadAndInitConnectPicture(response.data);
 				}
 			);
 			
@@ -56,6 +57,7 @@ export class ConnectPictureComponent implements AfterViewInit{
 		
 		this.successComponent.successModal.onHidden.subscribe(
 			response => {
+				
 				if(true || this.userIsSet){
 					//Navigate back to welcome
 					console.log("Navigate back to welcome");
@@ -68,8 +70,8 @@ export class ConnectPictureComponent implements AfterViewInit{
 		);
 
 	}
-	loadAndInitConnectPicture=()=>{
-		this.connectPictureService.getConnectPictures().subscribe(connectPictures =>{
+	loadAndInitConnectPicture=(data)=>{
+		this.connectPictureService.getConnectPictures(data.level.id).subscribe(connectPictures =>{
 			this.connectPictures = connectPictures;
 			let canvasElementRef = this.pictureCanvasService.canvasNew('canvas-container', connectPictures, this.elementRef);
 			this.pictureCanvasService.canvasListenersInit('canvas-container');

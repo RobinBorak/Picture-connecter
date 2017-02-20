@@ -8,10 +8,23 @@ export class ConnectPictureService {
 	constructor(private http: Http) { }
 	pictureDataHolder;
 
-	getConnectPictures() {
+	getConnectPictures(levelId:number) {
 		return this.http.get('./data/pictures_structure.json').map(
-			response => response.json().pictures
+			response => this.dummyPictureFilter(response, levelId)
 		);
+	}
+
+	dummyPictureFilter(response, levelId:number){
+		let returnPicturesAr = [];
+		if(levelId === 1){
+			returnPicturesAr = response.json().pictures.splice(0, 4);
+		}else if(levelId === 2){
+			returnPicturesAr = response.json().pictures.splice(0, 6);
+		}else{
+			returnPicturesAr = response.json().pictures;
+		}
+		
+		return returnPicturesAr;
 	}
 
 	shuffle(sourceArray) {
