@@ -112,7 +112,7 @@ export class PictureCanvasService {
 					}else{
 						imageOptions.offsetX = 0;
 					}
-					if((imagesDrawn.length+1)%3===0){
+					if(imagesDrawn.length%2===0){
 						imageOptions.offsetY += imageOptions.height + imageOptions.yPadding;
 					}else{
 						

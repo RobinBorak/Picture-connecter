@@ -11,10 +11,23 @@ export class UserSelectComponent {
 	user = {
 		username: ''
 	}
+	levels = [
+		{
+			id: 1,
+			name: "Beginner"
+		},{
+			id: 2,
+			name: "Expert"
+		}
+	]
+	selectedLevel = {}
 
 	@ViewChild('userSelectModal') public userSelectModal:ModalDirective;
 
-	constructor(){}
+	constructor(){
+		this.selectedLevel = this.levels[0]
+		
+	}
 
 	public showModal():void {
 		this.userSelectModal.show();
@@ -25,6 +38,12 @@ export class UserSelectComponent {
 	}
 
 	public selectUser():void {
+		//export this data
+		(this.userSelectModal as any).data = {
+			user: this.user,
+			level: this.selectedLevel
+		};
+
 		this.hideModal();
 	}
 

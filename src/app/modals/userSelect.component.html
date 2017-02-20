@@ -18,6 +18,15 @@
               *ngIf="!user.username" class="fa fa-arrow-left bounce-horizontal"> Choose </i>
         </div>
 
+        <div>
+          <label for="username">Level</label>
+          <select class="form-control" name="level" id="level" [(ngModel)]="selectedLevel">
+            <option *ngFor="let level of levels" [value]="level">{{level.name}}</option>
+          </select>
+          
+          <i style="position: relative; bottom: 1.8em; margin-left: 10em; height: 0"
+              *ngIf="!selectedLevel" class="fa fa-arrow-left bounce-horizontal"> Choose </i>
+        </div>
 
       </div>
       <div class="modal-footer">
