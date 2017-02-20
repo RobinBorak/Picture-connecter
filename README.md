@@ -1,11 +1,4 @@
-# connect picture application
-
-## Dependencies
-- You must have `node` and `npm` installed (via `brew install node` or [NodeJS.org](https://nodejs.org/en/));
-- You must also have `typings` installed globally via `npm i -g typings`
-- Be sure that you have `typings` version `1.x`
-
-## Getting Started
+## Picture connecter
 
 
 ```bash
@@ -13,11 +6,11 @@ cd connect-picture
 npm run initDev
 ```
 
-Then navigate your browser to [http://localhost:3001](http://localhost:3001) and use the app.
+Then navigate your browser to [http://localhost:4200](http://localhost:4200) and use the app.
 
 ## Just start server
 ```bash
-npm start
+npm run start
 ```
 
 ## build
@@ -26,12 +19,10 @@ cd connect-picture
 npm run initDev
 npm run build
 
-copy following files in to build folder:
-css
+copy following files in to dist folder:
 data
-index
 
 in index.html
 set base href accordingly
-	example: href="build"
+	example: href="/subfolder/"
 ```
